@@ -7,4 +7,5 @@
     <title>Stock Card System</title>
     <link rel="stylesheet" href="main_ui/css/bootstrap.min.css">
     <script type="text/javascript" src="main_ui/js/bootstrap.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 </head>

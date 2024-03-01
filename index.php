@@ -1,4 +1,9 @@
-<?php include 'header.php'; ?>
+<?php
+
+include 'header.php';
+include 'database.php';
+
+?>
 
 <body>
     <div class="container-lg shadow-sm">
@@ -6,20 +11,44 @@
 
         <div class="row mb-3">
             <div class="col-1 text-center p-0 m-0">
-                <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap" width="30" height="24">
+                <img src="" alt="logo" width="30" height="24">
             </div>
             <div class="col-11 p-0">
                 <p class="ps-5 m-0">Department of Agriculture</p>
                 <p class="ps-5 m-0"><strong>Regional Field Office No. 5</strong></p>
             </div>
         </div>
-
         <div class="row bg-light p-2">
-            <div>
-                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+            <div class="col-1">
+                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
                     data-bs-target="#addItem">Add Item</button>
             </div>
+            <div class="col-11">
+                <select id="filterSelect" class="form-select form-select-sm border-success" style="width: 250px;">
+                    <option disabled selected>Select Item</option>
+                    <?php
+                    $stmt = $conn->prepare("SELECT id, item FROM item");
+
+                    if ($stmt && $stmt->execute()) {
+                        $result = $stmt->get_result();
+
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='" . htmlspecialchars($row['id'], ENT_QUOTES) . "'>" . htmlspecialchars($row['item'], ENT_QUOTES) . "</option>";
+                        }
+
+                        $stmt->close();
+                    } else {
+                        echo "Error preparing statement: " . $conn->error;
+                    }
+
+                    $conn->close();
+                    ?>
+                </select>
+            </div>
         </div>
+
+        <!-- Display the filtered data here -->
+        <div id="filteredData"></div>
 
     </div>
 </body>
@@ -55,5 +84,37 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        // Function to update the content based on the selected filter
+        function updateContent() {
+            var selectedFilter = $("#filterSelect").val();
+
+            // Use AJAX to send the selected filter to a PHP script for processing
+            $.ajax({
+                type: "POST",
+                url: "filter.php", // Update this with the actual PHP script name
+                data: { filter: selectedFilter },
+                success: function (response) {
+                    // Update the content with the response from the server
+                    $("#filteredData").html(response);
+                },
+                error: function () {
+                    alert("Error processing request");
+                }
+            });
+        }
+
+        // Call the function initially to load all data
+        updateContent();
+
+        // Attach an event listener to the select dropdown
+        $("#filterSelect").change(function () {
+            // Call the function when the user changes the filter
+            updateContent();
+        });
+    });
+</script>
 
 </html>
