@@ -23,8 +23,8 @@ include 'database.php';
                 <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
                     data-bs-target="#addItem">Add Item</button>
             </div>
-            <div class="col-11">
-                <select id="filterSelect" class="form-select form-select-sm border-success" style="width: 250px;">
+            <div class="col-2">
+                <select id="filterSelect" class="form-select form-select-sm border-success">
                     <option disabled selected>Select Item</option>
                     <?php
                     $stmt = $conn->prepare("SELECT id, item FROM item");
@@ -44,6 +44,10 @@ include 'database.php';
                     $conn->close();
                     ?>
                 </select>
+            </div>
+            <div class="col-9">
+                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#addItem">Add Item</button>
             </div>
         </div>
 
@@ -104,9 +108,18 @@ include 'database.php';
                     alert("Error processing request");
                 }
             });
+            // Save the selected filter to localStorage
+            localStorage.setItem("selectedFilter", selectedFilter);
         }
 
-        // Call the function initially to load all data
+        // Retrieve the selected filter from localStorage on page load
+        var storedFilter = localStorage.getItem("selectedFilter");
+        if (storedFilter) {
+            // Set the selected filter to the stored value
+            $("#filterSelect").val(storedFilter);
+        }
+
+        // Call the function initially to load all data or the stored filter
         updateContent();
 
         // Attach an event listener to the select dropdown

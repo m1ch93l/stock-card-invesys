@@ -2,8 +2,8 @@
 // Establish a connection to your MySQL database
 include 'database.php';
 
-// Get the selected filter condition from the AJAX request
-$filterCondition = $_POST['filter'];
+// Check if the filter condition is provided in the AJAX request, otherwise use a default filter
+$filterCondition = isset($_POST['filter']) ? $_POST['filter'] : 'all';
 
 // Use a prepared statement to prevent SQL injection
 if ($filterCondition == 'all') {
@@ -48,9 +48,13 @@ if ($result) {
 
     while ($row = $result->fetch_assoc()) {
         echo "<tr>
-            <td>{$row['date']}</td>
             <td>{$row['item']}</td>
-            <td>{$row['description']}</td>
+            <td>{$row['item']}</td>
+            <td>{$row['item']}</td>
+            <td>{$row['item']}</td>
+            <td>{$row['item']}</td>
+            <td>{$row['item']}</td>
+            <td>{$row['item']}</td>
         </tr>";
     }
 
