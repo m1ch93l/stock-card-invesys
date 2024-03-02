@@ -1,7 +1,6 @@
 <?php
 
 include 'header.php';
-include 'database.php';
 
 ?>
 
@@ -26,7 +25,7 @@ include 'database.php';
             <div class="col-2">
                 <select id="filterSelect" class="form-select form-select-sm border-success">
                     <option disabled selected>Select Item</option>
-                    <?php
+                    <?php include 'database.php';
                     $stmt = $conn->prepare("SELECT id, item FROM item");
 
                     if ($stmt && $stmt->execute()) {
@@ -46,8 +45,8 @@ include 'database.php';
                 </select>
             </div>
             <div class="col-9">
-                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#addItem">Add Item</button>
+                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#addRelease">Release</button>
             </div>
         </div>
 
@@ -83,6 +82,59 @@ include 'database.php';
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" name="stock-add" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addRelease" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Release</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="crud.php" method="post">
+                <div class="modal-body">
+                    <div class="form-group mb-2">
+                        <label for="" class="form-label">Date:</label>
+                        <input type="text" class="form-control mb-1" value="<?php
+                        $currentDate = date('F j, Y');
+                        echo $currentDate ?>" readonly>
+                        <label for="" class="form-label">Item:</label>
+                        <select name="itemId" class="form-select border-success mb-1">
+                            <option disabled selected>Select Item</option>
+                            <?php include 'database.php';
+                            $stmt = $conn->prepare("SELECT id, item FROM item");
+
+                            if ($stmt && $stmt->execute()) {
+                                $result = $stmt->get_result();
+
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<option value='" . htmlspecialchars($row['id'], ENT_QUOTES) . "'>" . htmlspecialchars($row['item'], ENT_QUOTES) . "</option>";
+                                }
+
+                                $stmt->close();
+                            } else {
+                                echo "Error preparing statement: " . $conn->error;
+                            }
+
+                            $conn->close();
+                            ?>
+                        </select>
+                        <label for="" class="form-label">Reference:</label>
+                        <input type="text" class="form-control mb-1" name="refer">
+                        <label for="" class="form-label">Release to:</label>
+                        <input type="text" class="form-control mb-1" name="releasedBy">
+                        <label for="" class="form-label">Balance:</label>
+                        <input type="text" class="form-control mb-1" name="balance">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" name="release-add" class="btn btn-primary">Add</button>
                 </div>
             </form>
         </div>
