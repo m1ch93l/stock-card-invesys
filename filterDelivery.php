@@ -25,18 +25,19 @@ if ($result) {
     echo "<table class='table table-bordered text-center' border='1'>
     <thead>
         <tr>
-            <th>Actual Delivery</th>
+            <th>Total Released</th>
             <th>Remaining Quantity</th>
         </tr>
     </thead>";
 
     while ($row = $result->fetch_assoc()) {
-        $remaining = $row['actual_delivery'] - $row['remain'];
+        $remaining    = $row['actual_delivery'] - $row['remain'];
+        $totalRelease = $row['remain'];
         echo "
     <tbody>
         <tr>
-            <td class='fw-bold'>{$row['actual_delivery']}</td>
-            <td class='text-danger fw-bold'>{$remaining}</td>
+            <td class='fw-bold fs-3'>{$totalRelease}</td>
+            <td class='text-danger fw-bold fs-3'>{$remaining}</td>
         </tr>
     </tbody>";
     }

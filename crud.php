@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $refer     = mysqli_real_escape_string($conn, $_POST['refer']);
         $releaseBy = mysqli_real_escape_string($conn, $_POST['releasedBy']);
         $balance   = mysqli_real_escape_string($conn, $_POST['balance']);
-        $query     = "INSERT INTO released_item (item_id,reference,release_by,balance_quantity) VALUES (?,?,?,?)";
+        $query     = "INSERT INTO released_item (item_id,reference,release_to,balance_quantity) VALUES (?,?,?,?)";
         $params    = [$itemId, $refer, $releaseBy, $balance];
         if (executePreparedStatement($conn, $query, $params, "isss")) {
             header("Location: index.php");

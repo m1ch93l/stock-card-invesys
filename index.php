@@ -23,7 +23,7 @@ include 'header.php';
                     data-bs-target="#addItem">Add Item</button>
             </div>
             <div class="col-3">
-                <select id="filterSelect" class="form-select form-select-sm fw-bold">
+                <select id="filterSelect" class="form-select form-select-sm fw-bold text-uppercase">
                     <option disabled selected>Select Item</option>
                     <?php include 'database.php';
                     $stmt = $conn->prepare("SELECT id, item FROM item");

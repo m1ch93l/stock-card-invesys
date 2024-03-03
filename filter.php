@@ -25,9 +25,9 @@ if ($result) {
     echo "<table class='table table-bordered text-center' border='1'>
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Reference</th>
-            <th>Recepient</th>
+            <th width='250'>Date</th>
+            <th width='250'>Reference</th>
+            <th width='350'>Recipient</th>
             <th>
                 <div class='border-bottom'>Balance</div>
                 <div>Quantity</div>
@@ -36,12 +36,15 @@ if ($result) {
     </thead>";
 
     while ($row = $result->fetch_assoc()) {
+        $dateString    = $row['date'];
+        $timestamp     = strtotime($dateString);
+        $formattedDate = date("F, j Y g:i a", $timestamp);
         echo "
     <tbody>
         <tr>
-            <td>{$row['date']}</td>
+            <td>{$formattedDate}</td>
             <td>{$row['reference']}</td>
-            <td>{$row['release_to']}</td>
+            <td class='text-uppercase'>{$row['release_to']}</td>
             <td class='text-danger fw-bold'>{$row['balance_quantity']}</td>
         </tr>
     </tbody>";
