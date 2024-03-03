@@ -212,6 +212,11 @@ if (isset($_SESSION['admin'])) {
             if (storedFilter) {
                 // Set the selected filter to the stored value
                 $("#filterSelect").val(storedFilter);
+
+            } else {
+                // If there's no stored filter, select the default value (first option)
+                var defaultFilter = $("#filterSelect").val();
+                updateContent();
             }
 
             // Call the function initially to load all data or the stored filter
