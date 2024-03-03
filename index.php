@@ -136,7 +136,7 @@ include 'header.php';
                         </select>
                         <label for="" class="form-label">Reference:</label>
                         <input type="text" class="form-control mb-1" name="refer">
-                        <label for="" class="form-label">Release to:</label>
+                        <label for="" class="form-label">Recipient:</label>
                         <input type="text" class="form-control mb-1" name="releasedBy">
                         <label for="" class="form-label">Balance:</label>
                         <input type="text" class="form-control mb-1" name="balance">

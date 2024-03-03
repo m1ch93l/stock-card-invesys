@@ -41,7 +41,7 @@ if ($result) {
         <tr>
             <td>{$row['date']}</td>
             <td>{$row['reference']}</td>
-            <td>{$row['release_by']}</td>
+            <td>{$row['release_to']}</td>
             <td class='text-danger fw-bold'>{$row['balance_quantity']}</td>
         </tr>
     </tbody>";

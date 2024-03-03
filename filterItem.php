@@ -27,12 +27,12 @@ if ($result) {
     <div class='row mb-1 text-white bg-success'>
         <div class='col-6 mt-2'>
             <p class='border-bottom'><b>Item: </b>{$row['item']}</p>
-            <p class='border-bottom'><b>Description: </b>{$row['item']}</p>
-            <p class='border-bottom'><b>Unit of Measurement: </b>{$row['item']}</p>
+            <p class='border-bottom'><b>Description: </b>{$row['description']}</p>
+            <p class='border-bottom'><b>Unit of Measurement: </b>{$row['unit_measure']}</p>
         </div>
         <div class='col-6 mt-2'>
-            <p class='border-bottom'><b>Stock No: </b>{$row['item']}</p>
-            <p class='border-bottom'><b>Re-order point: </b>{$row['item']}</p>
+            <p class='border-bottom'><b>Stock No: </b>{$row['stock_no']}</p>
+            <p class='border-bottom'><b>Re-order point: </b>{$row['re_order']}</p>
             <p><b></b></p>
         </div>
     </div>";
