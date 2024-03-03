@@ -18,7 +18,11 @@ if (isset($_SESSION['admin'])) {
                     <p class="ps-5 m-0">Department of Agriculture</p>
                     <p class="ps-5 m-0"><strong>Regional Field Office No. 5</strong></p>
                 </div>
-                <div class="col-1"></div>
+                <div class="col-1 text-center fs-3">
+                    <a class="text-decoration-none text-success" type="button" href="logout.php">
+                        <span><i class='bx bx-log-out'></i></span>
+                    </a>
+                </div>
             </div>
             <div class="row p-2" style="background-color: #D5640E">
                 <div class="col-1">
