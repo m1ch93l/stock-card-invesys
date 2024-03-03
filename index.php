@@ -10,20 +10,20 @@ include 'header.php';
 
         <div class="row mb-3">
             <div class="col-1 text-center p-0 m-0">
-                <img src="" alt="logo" width="30" height="24">
+                <img src="image/DA.jpg" alt="logo" width="50" height="50">
             </div>
             <div class="col-11 p-0">
                 <p class="ps-5 m-0">Department of Agriculture</p>
                 <p class="ps-5 m-0"><strong>Regional Field Office No. 5</strong></p>
             </div>
         </div>
-        <div class="row bg-light p-2">
+        <div class="row p-2" style="background-color: #D5640E">
             <div class="col-1">
-                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                <button type="button" class="btn btn-outline-light btn-sm fw-bold" data-bs-toggle="modal"
                     data-bs-target="#addItem">Add Item</button>
             </div>
             <div class="col-3">
-                <select id="filterSelect" class="form-select form-select-sm border-success">
+                <select id="filterSelect" class="form-select form-select-sm fw-bold">
                     <option disabled selected>Select Item</option>
                     <?php include 'database.php';
                     $stmt = $conn->prepare("SELECT id, item FROM item");
@@ -45,13 +45,14 @@ include 'header.php';
                 </select>
             </div>
             <div class="col-8">
-                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                <button type="button" class="btn btn-outline-light btn-sm fw-bold" data-bs-toggle="modal"
                     data-bs-target="#addRelease">Release</button>
             </div>
         </div>
 
         <!-- Display the filtered data here -->
         <div class="row mt-2">
+            <div id="filteredItem"></div>
             <div class="col-9">
                 <div id="filteredData"></div>
             </div>
@@ -177,6 +178,19 @@ include 'header.php';
                 success: function (response) {
                     // Update the content with the response from the server
                     $("#filteredDelivery").html(response);
+                },
+                error: function () {
+                    alert("Error processing request");
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "filterItem.php", // Update this with the actual PHP script name
+                data: { filter: selectedFilter },
+                success: function (response) {
+                    // Update the content with the response from the server
+                    $("#filteredItem").html(response);
                 },
                 error: function () {
                     alert("Error processing request");

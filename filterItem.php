@@ -1,0 +1,51 @@
+<?php
+// Establish a connection to your MySQL database
+include 'database.php';
+
+// Check if the filter condition is provided in the AJAX request, otherwise use a default filter
+$filterCondition = isset($_POST['filter']) ? $_POST['filter'] : 'all';
+
+// Use a prepared statement to prevent SQL injection
+if ($filterCondition == 'all') {
+    $sql  = "SELECT * FROM item";
+    $stmt = $conn->prepare($sql);
+} else {
+    // Modify this based on your specific filtering conditions
+    $sql  = "SELECT * FROM item WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $filterCondition);
+}
+
+// Execute the prepared statement
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result) {
+
+    while ($row = $result->fetch_assoc()) {
+        echo "
+    <div class='row mb-1 text-white bg-success'>
+        <div class='col-6 mt-2'>
+            <p class='border-bottom'><b>Item: </b>{$row['item']}</p>
+            <p class='border-bottom'><b>Description: </b>{$row['item']}</p>
+            <p class='border-bottom'><b>Unit of Measurement: </b>{$row['item']}</p>
+        </div>
+        <div class='col-6 mt-2'>
+            <p class='border-bottom'><b>Stock No: </b>{$row['item']}</p>
+            <p class='border-bottom'><b>Re-order point: </b>{$row['item']}</p>
+            <p><b></b></p>
+        </div>
+    </div>";
+    }
+
+    echo "</table>";
+} else {
+    echo "Error executing query: " . $stmt->error;
+}
+
+// Close the prepared statement
+$stmt->close();
+
+// Close the database connection
+$conn->close();
+?>
