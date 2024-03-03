@@ -34,7 +34,7 @@ if (php_sapi_name() == "cli-server") {
                 const name = "PHP Built In Server";
                 const socket = io("ws://localhost:5001", {
                     auth: {
-                        token: "462d473a-199c-40cc-8dad-ecfa21d33513"
+                        token: "c6baa722-9a67-49fd-a118-e850a4a8a6bf"
                     },
                     withCredentials: true,
                     reconnectionDelay: 2000

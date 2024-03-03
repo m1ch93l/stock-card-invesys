@@ -44,6 +44,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: index.php");
         }
     }
+    // item edit
+    if (isset($_POST['stock-edit'])) {
+        $itemid         = mysqli_real_escape_string($conn, $_POST['id']);
+        $item           = mysqli_real_escape_string($conn, $_POST['item']);
+        $description    = mysqli_real_escape_string($conn, $_POST['description']);
+        $uom            = mysqli_real_escape_string($conn, $_POST['uom']);
+        $stockno        = mysqli_real_escape_string($conn, $_POST['stockno']);
+        $reorder        = mysqli_real_escape_string($conn, $_POST['reorder']);
+        $actualDelivery = mysqli_real_escape_string($conn, $_POST['actualDelivery']);
+        $query          = "UPDATE item SET item = ?, description = ?, unit_measure = ?, stock_no = ?, re_order = ?, actual_delivery = ? WHERE id = ?";
+        $params         = [$item, $description, $uom, $stockno, $reorder, $actualDelivery, $itemid];
+        if (executePreparedStatement($conn, $query, $params, "ssssssi")) {
+            header("Location: index.php");
+        }
+    }
+    // delete item
+    if (isset($_POST['stock-delete'])) {
+        $itemid = mysqli_real_escape_string($conn, $_POST['itemId']);
+        $query  = "DELETE FROM item WHERE id = ?";
+        $params = [$itemid];
+        if (executePreparedStatement($conn, $query, $params, "i")) {
+            header("Location: index.php");
+        }
+    }
 }
 // user login
 function getUserDetails($conn, $username)
