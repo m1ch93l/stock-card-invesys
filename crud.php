@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 include 'database.php';
 
 function executePreparedStatement($conn, $query, $params, $types = "")
@@ -74,6 +74,7 @@ if (isset($_POST['user-login'])) {
     if ($userDetails && $userDetails['password'] === $password) {
         // Password is correct
         // Perform additional actions or redirect as needed
+        $_SESSION['admin'] = $userDetails['username'];
         header("Location: index.php");
     } else {
         // Incorrect username or password
