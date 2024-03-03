@@ -20,14 +20,15 @@ function executePreparedStatement($conn, $query, $params, $types = "")
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // item add
     if (isset($_POST['stock-add'])) {
-        $item        = mysqli_real_escape_string($conn, $_POST['item']);
-        $description = mysqli_real_escape_string($conn, $_POST['description']);
-        $uom         = mysqli_real_escape_string($conn, $_POST['uom']);
-        $stockno     = mysqli_real_escape_string($conn, $_POST['stockno']);
-        $reorder     = mysqli_real_escape_string($conn, $_POST['reorder']);
-        $query       = "INSERT INTO item (item,description,unit_measure,stock_no,re_order) VALUES (?,?,?,?,?)";
-        $params      = [$item, $description, $uom, $stockno, $reorder];
-        if (executePreparedStatement($conn, $query, $params, "sssss")) {
+        $item           = mysqli_real_escape_string($conn, $_POST['item']);
+        $description    = mysqli_real_escape_string($conn, $_POST['description']);
+        $uom            = mysqli_real_escape_string($conn, $_POST['uom']);
+        $stockno        = mysqli_real_escape_string($conn, $_POST['stockno']);
+        $reorder        = mysqli_real_escape_string($conn, $_POST['reorder']);
+        $actualDelivery = mysqli_real_escape_string($conn, $_POST['actualDelivery']);
+        $query          = "INSERT INTO item (item,description,unit_measure,stock_no,re_order,actual_delivery) VALUES (?,?,?,?,?,?)";
+        $params         = [$item, $description, $uom, $stockno, $reorder, $actualDelivery];
+        if (executePreparedStatement($conn, $query, $params, "ssssss")) {
             header("Location: index.php");
         }
     }

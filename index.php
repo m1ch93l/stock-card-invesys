@@ -22,7 +22,7 @@ include 'header.php';
                 <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
                     data-bs-target="#addItem">Add Item</button>
             </div>
-            <div class="col-2">
+            <div class="col-3">
                 <select id="filterSelect" class="form-select form-select-sm border-success">
                     <option disabled selected>Select Item</option>
                     <?php include 'database.php';
@@ -44,14 +44,21 @@ include 'header.php';
                     ?>
                 </select>
             </div>
-            <div class="col-9">
+            <div class="col-8">
                 <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
                     data-bs-target="#addRelease">Release</button>
             </div>
         </div>
 
         <!-- Display the filtered data here -->
-        <div id="filteredData"></div>
+        <div class="row mt-2">
+            <div class="col-9">
+                <div id="filteredData"></div>
+            </div>
+            <div class="col-3">
+                <div id="filteredDelivery"></div>
+            </div>
+        </div>
 
     </div>
 </body>
@@ -77,6 +84,8 @@ include 'header.php';
                         <input type="text" class="form-control mb-1" name="stockno">
                         <label for="" class="form-label">Re-order Point:</label>
                         <input type="text" class="form-control mb-1" name="reorder">
+                        <label for="" class="form-label">Actual Delivery:</label>
+                        <input type="text" class="form-control mb-1" name="actualDelivery">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -155,6 +164,19 @@ include 'header.php';
                 success: function (response) {
                     // Update the content with the response from the server
                     $("#filteredData").html(response);
+                },
+                error: function () {
+                    alert("Error processing request");
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "filterDelivery.php", // Update this with the actual PHP script name
+                data: { filter: selectedFilter },
+                success: function (response) {
+                    // Update the content with the response from the server
+                    $("#filteredDelivery").html(response);
                 },
                 error: function () {
                     alert("Error processing request");

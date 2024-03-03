@@ -7,11 +7,11 @@ $filterCondition = isset($_POST['filter']) ? $_POST['filter'] : 'all';
 
 // Use a prepared statement to prevent SQL injection
 if ($filterCondition == 'all') {
-    $sql  = "SELECT * FROM release_item";
+    $sql  = "SELECT * FROM item";
     $stmt = $conn->prepare($sql);
 } else {
     // Modify this based on your specific filtering conditions
-    $sql  = "SELECT * FROM released_item WHERE item_id = ?";
+    $sql  = "SELECT item, actual_delivery, SUM(balance_quantity) as remain FROM item JOIN released_item ON item.id=released_item.item_id WHERE item.id = ? GROUP BY item.id";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $filterCondition);
 }
@@ -25,24 +25,18 @@ if ($result) {
     echo "<table class='table table-bordered text-center' border='1'>
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Reference</th>
-            <th>Recepient</th>
-            <th>
-                <div class='border-bottom'>Balance</div>
-                <div>Quantity</div>
-            </th>
+            <th>Actual Delivery</th>
+            <th>Remaining Quantity</th>
         </tr>
     </thead>";
 
     while ($row = $result->fetch_assoc()) {
+        $remaining = $row['actual_delivery'] - $row['remain'];
         echo "
     <tbody>
         <tr>
-            <td>{$row['date']}</td>
-            <td>{$row['reference']}</td>
-            <td>{$row['release_by']}</td>
-            <td class='text-danger fw-bold'>{$row['balance_quantity']}</td>
+            <td class='fw-bold'>{$row['actual_delivery']}</td>
+            <td class='text-danger fw-bold'>{$remaining}</td>
         </tr>
     </tbody>";
     }
