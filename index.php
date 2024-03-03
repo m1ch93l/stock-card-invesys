@@ -83,7 +83,7 @@ if (isset($_SESSION['admin'])) {
                     <div class="modal-body">
                         <div class="form-group mb-2">
                             <label for="" class="form-label">Item:</label>
-                            <input type="text" class="form-control mb-1" name="item">
+                            <input type="text" class="form-control mb-1" name="item" required>
                             <label for="" class="form-label">Description:</label>
                             <input type="text" class="form-control mb-1" name="description">
                             <label for="" class="form-label">Unit of Measurement:</label>
@@ -93,7 +93,7 @@ if (isset($_SESSION['admin'])) {
                             <label for="" class="form-label">Re-order Point:</label>
                             <input type="text" class="form-control mb-1" name="reorder">
                             <label for="" class="form-label">Actual Delivery:</label>
-                            <input type="text" class="form-control mb-1" name="actualDelivery">
+                            <input type="text" class="form-control mb-1" name="actualDelivery" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -113,7 +113,7 @@ if (isset($_SESSION['admin'])) {
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Release</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="crud.php" method="post">
+                <form action="crud.php" method="post" onsubmit="return validateForm()">
                     <div class="modal-body">
                         <div class="form-group mb-2">
                             <label for="" class="form-label">Date:</label>
@@ -121,7 +121,7 @@ if (isset($_SESSION['admin'])) {
                             $currentDate = date('F j, Y');
                             echo $currentDate ?>" readonly>
                             <label for="" class="form-label">Item:</label>
-                            <select name="itemId" class="form-select border-success mb-1">
+                            <select id="itemId" name="itemId" class="form-select border-success mb-1">
                                 <option disabled selected>Select Item</option>
                                 <?php include 'database.php';
                                 $stmt = $conn->prepare("SELECT id, item FROM item");
@@ -144,9 +144,9 @@ if (isset($_SESSION['admin'])) {
                             <label for="" class="form-label">Reference:</label>
                             <input type="text" class="form-control mb-1" name="refer">
                             <label for="" class="form-label">Recipient:</label>
-                            <input type="text" class="form-control mb-1" name="releasedBy">
+                            <input type="text" class="form-control mb-1" name="releasedBy" required>
                             <label for="" class="form-label">Balance:</label>
-                            <input type="text" class="form-control mb-1" name="balance">
+                            <input type="text" class="form-control mb-1" name="balance" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -227,7 +227,21 @@ if (isset($_SESSION['admin'])) {
                 // Call the function when the user changes the filter
                 updateContent();
             });
+
         });
+
+        function validateForm() {
+            var selectedItem = document.getElementById("itemId").value;
+
+            // Check if an item is selected
+            if (selectedItem == "Select Item") {
+                alert("Please select an item before submitting the form.");
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+
     </script>
 
     </html>
