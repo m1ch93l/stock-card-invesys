@@ -51,9 +51,12 @@ if (isset($_SESSION['admin'])) {
                         ?>
                     </select>
                 </div>
-                <div class="col-8">
+                <div class="col-7">
                     <button type="button" class="btn btn-outline-light btn-sm fw-bold" data-bs-toggle="modal"
                         data-bs-target="#addRelease">Release</button>
+                </div>
+                <div class="col-1">
+                    <a href="archive.php" type="button" class="btn btn-danger btn-sm fw-bold border-light">Archive</a>
                 </div>
             </div>
 
