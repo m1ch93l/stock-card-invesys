@@ -111,6 +111,7 @@ if ($result) {
                     <div class='modal-body'>
                         <p>Are you sure you want to archive this item '{$row['item']}'?</p>
                         <input type='hidden' value='{$row['id']}' name='itemId'>
+                        <input type='hidden' value='1' name='status'>
                     </div>
                     <div class='modal-footer'>
                         <button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Cancel</button>

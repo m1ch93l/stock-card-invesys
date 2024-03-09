@@ -68,6 +68,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: index.php");
         }
     }
+    // update item archive status
+    if (isset($_POST['stock-archive'])) {
+        $itemid = mysqli_real_escape_string($conn, $_POST['itemId']);
+        $status = mysqli_real_escape_string($conn, $_POST['status']);
+        $query  = "UPDATE item SET archive_status = ? WHERE id = ?";
+        $params = [$status, $itemid];
+        if (executePreparedStatement($conn, $query, $params, "ii")) {
+            header("Location: index.php");
+        }
+    }
 }
 // user login
 function getUserDetails($conn, $username)
