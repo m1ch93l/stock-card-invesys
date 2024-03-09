@@ -24,8 +24,11 @@ if (isset($_SESSION['admin'])) {
                     </a>
                 </div>
             </div>
-            <div class="row p-4" style="background-color: #D5640E">
-
+            <div class="row p-2" style="background-color: #D5640E">
+                <div class="col-1">
+                    <a href="archive.php" type="button" class="btn btn-sm fw-bold fs-5 text-white"><i
+                            class='bx bx-arrow-back'></i></a>
+                </div>
             </div>
 
             <?php
@@ -35,11 +38,7 @@ if (isset($_SESSION['admin'])) {
             $getview = $_GET['getview'];
 
             // Use a prepared statement to prevent SQL injection
-            $query = "SELECT item, description, unit_measure, stock_no, re_order, actual_delivery, date, reference, release_to, balance_quantity, SUM(balance_quantity) as remain
-          FROM item
-          JOIN released_item ON released_item.item_id = item.id
-          WHERE item.id = ?
-          GROUP BY item.id, released_item.id";
+            $query = "SELECT id, item, description, unit_measure, stock_no, re_order, actual_delivery FROM item WHERE id = ? ";
 
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $getview); // Assuming 'id' is an integer, adjust the type accordingly
@@ -48,95 +47,104 @@ if (isset($_SESSION['admin'])) {
             $result = $stmt->get_result();
 
             if ($result) {
-                $row           = $result->fetch_assoc();
-                $dateString    = $row['date'];
-                $timestamp     = strtotime($dateString);
-                $formattedDate = date("F, j Y g:i a", $timestamp);
 
-                $remaining    = $row['actual_delivery'] - $row['remain'];
-                $totalRelease = $row['remain']; ?>
+                while ($row = $result->fetch_assoc()) { ?>
 
-                <!-- Display the filtered data here -->
-
-
-                <div class="row mb-1 text-white bg-success mt-2 mb2">
-                    <div class="col-6 mt-2">
-                        <p class="border-bottom text-capitalize"><b>Item: </b>
-                            <?php echo $row['item']; ?>
-                        </p>
-                        <p class="border-bottom text-capitalize"><b>Description: </b>
-                            <?php echo $row['description']; ?>
-                        </p>
-                        <p class="border-bottom text-capitalize"><b>Unit of Measurement: </b>
-                            <?php echo $row['unit_measure']; ?>
-                        </p>
+                    <!-- Display the filtered data here -->
+                    <div class="row mb-1 text-white bg-success mt-2 mb2">
+                        <div class="col-6 mt-2">
+                            <p class="border-bottom text-capitalize"><b>Item: </b>
+                                <?php echo $row['item']; ?>
+                            </p>
+                            <p class="border-bottom text-capitalize"><b>Description: </b>
+                                <?php echo $row['description']; ?>
+                            </p>
+                            <p class="border-bottom text-capitalize"><b>Unit of Measurement: </b>
+                                <?php echo $row['unit_measure']; ?>
+                            </p>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <p class="border-bottom text-capitalize"><b>Stock No: </b>
+                                <?php echo $row['stock_no']; ?>
+                            </p>
+                            <p class="border-bottom text-capitalize"><b>Re-order point: </b>
+                                <?php echo $row['re_order']; ?>
+                            </p>
+                            <p class="border-bottom text-capitalize"><b>Actual Delivery: </b>
+                                <?php echo $row['actual_delivery']; ?>
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-6 mt-2">
-                        <p class="border-bottom text-capitalize"><b>Stock No: </b>
-                            <?php echo $row['stock_no']; ?>
-                        </p>
-                        <p class="border-bottom text-capitalize"><b>Re-order point: </b>
-                            <?php echo $row['re_order']; ?>
-                        </p>
-                        <p class="border-bottom text-capitalize"><b>Actual Delivery: </b>
-                            <?php echo $row['actual_delivery']; ?>
-                        </p>
-                    </div>
-                </div>
-                <div class="row mt-2"">
+                    <div class="row mt-2"">
                     <div class=" col-9">
-                    <table class="table table-bordered text-center" border="1">
-                        <thead>
-                            <tr>
-                                <th width="250">Date</th>
-                                <th width="250">Reference</th>
-                                <th width="350">Recipient</th>
-                                <th>
-                                    <div class="border-bottom">Balance</div>
-                                    <div>Quantity</div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <?= $formattedDate ?>
-                                </td>
-                                <td>
-                                    <?= $row['reference'] ?>
-                                </td>
-                                <td class="text-uppercase">
-                                    <?= $row['release_to'] ?>
-                                </td>
-                                <td class="text-danger fw-bold">
-                                    <?= $row['balance_quantity'] ?>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-3">
-                    <table class='table table-bordered text-center' border='1'>
-                        <thead>
-                            <tr>
-                                <th>Total Released</th>
-                                <th>Remaining Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class='fw-bold fs-3'>
-                                    <?= $totalRelease ?>
-                                </td>
-                                <td class='text-danger fw-bold fs-3'>
-                                    <?= $remaining ?>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
+                        <table class="table table-bordered text-center" border="1">
+                            <thead>
+                                <tr>
+                                    <th width="250">Date</th>
+                                    <th width="250">Reference</th>
+                                    <th width="350">Recipient</th>
+                                    <th>
+                                        <div class="border-bottom">Balance</div>
+                                        <div>Quantity</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php // Define the SQL query with placeholders
+                                            $query = "SELECT * FROM released_item WHERE item_id = ? ";
+                                            $stmt  = $conn->prepare($query);
+                                            $stmt->bind_param("i", $getview);
+                                            $stmt->execute();
+                                            $result = $stmt->get_result();
+
+                                            while ($row = $result->fetch_assoc()) {
+
+                                                $dateString    = $row['date'];
+                                                $timestamp     = strtotime($dateString);
+                                                $formattedDate = date("F, j Y g:i a", $timestamp);
+                                                ?>
+                                    <tr>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td class="text-uppercase">
+                                            1
+                                        </td>
+                                        <td class="text-danger fw-bold">
+                                            1
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-3">
+                        <table class='table table-bordered text-center' border='1'>
+                            <thead>
+                                <tr>
+                                    <th>Total Released</th>
+                                    <th>Remaining Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class='fw-bold fs-3'>
+                                        1
+                                    </td>
+                                    <td class='text-danger fw-bold fs-3'>
+                                        1
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <?php } ?>
+            </div>
 
             <?php
 
