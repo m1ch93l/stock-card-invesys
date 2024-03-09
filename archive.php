@@ -30,7 +30,7 @@ if (isset($_SESSION['admin'])) {
                             class='bx bx-arrow-back'></i></a>
                 </div>
                 <div class="col-2">
-                    <input id="archivefilterInput" type="date" class="form-control form-control-sm">
+                    <input id="archivefilterInput" type="date" value="" class="form-control form-control-sm">
                 </div>
                 <div class="col-8">
 
@@ -42,8 +42,8 @@ if (isset($_SESSION['admin'])) {
 
             <!-- Display the filtered data here -->
             <div class="row mt-2">
-                <div class="col-9">
-                    <div id="filteredData"></div>
+                <div class="col-12">
+                    <div id="filteredAData"></div>
                 </div>
             </div>
 
@@ -52,40 +52,30 @@ if (isset($_SESSION['admin'])) {
 
     <script>
         $(document).ready(function () {
-
             function updateContent() {
                 var selectedFilter = $("#archivefilterInput").val();
-
-                // Use AJAX to send the selected filter to a PHP script for processing
                 $.ajax({
                     type: "POST",
-                    url: "archiveFilter.php", // Update this with the actual PHP script name
+                    url: "archiveFilter.php",
                     data: { filter: selectedFilter },
                     success: function (response) {
-                        // Update the content with the response from the server
-                        $("#filteredData").html(response);
+                        $("#filteredAData").html(response);
                     },
                     error: function () {
                         alert("Error processing request");
                     }
                 });
-
                 localStorage.setItem("selectedFilter", selectedFilter);
             }
 
-            // Retrieve the selected filter from localStorage on page load
             var storedFilter = localStorage.getItem("selectedFilter");
             if (storedFilter) {
-                // Set the selected filter to the stored value
                 $("#archivefilterInput").val(storedFilter);
             }
 
-            // Call the function initially to load all data or the stored filter
-            updateContent();
+            updateContent(); // Call the function initially to load all data or the stored filter
 
-            // Attach an event listener to the date input
             $("#archivefilterInput").change(function () {
-                // Call the function when the user changes the filter
                 updateContent();
             });
         });

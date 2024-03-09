@@ -1,44 +1,34 @@
 <?php
-// Establish a connection to your MySQL database
 include 'database.php';
 
-// Check if the filter condition is provided in the AJAX request, otherwise use a default filter
 $filterCondition = isset($_POST['filter']) ? $_POST['filter'] : 'all';
 
-// Use a prepared statement to prevent SQL injection
 if ($filterCondition == 'all') {
-    $sql  = "SELECT * FROM archive";
+    $sql  = "SELECT * FROM released_item";
     $stmt = $conn->prepare($sql);
 } else {
     // Modify this based on your specific filtering conditions
-    $sql  = "SELECT * FROM archive WHERE item_id = ?";
+    $sql  = "SELECT item.id as iid, item, actual_delivery, SUM(balance_quantity) as remain FROM item JOIN released_item ON item.id=released_item.item_id WHERE DATE(date) = ? AND archive_status = 1 GROUP BY item.id";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $filterCondition);
 }
 
-// Execute the prepared statement
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result) {
-    // Generate HTML for the filtered data
     echo "<table class='table table-bordered text-center' border='1'>
     <thead>
         <tr>
-            <th width='250'>Date</th>
-            <th width='250'>Items</th>
+            <th width='250' class='fs-3'>Items Released</th>
         </tr>
     </thead>";
 
     while ($row = $result->fetch_assoc()) {
-        $dateString    = $row['date'];
-        $timestamp     = strtotime($dateString);
-        $formattedDate = date("F, j Y g:i a", $timestamp);
         echo "
     <tbody>
         <tr>
-            <td>{$formattedDate}</td>
-            <td>{$row['']}</td>
+            <td><a href='archiveView.php?getview={$row['iid']}'>{$row['item']}</a></td>
         </tr>
     </tbody>";
     }
@@ -48,9 +38,6 @@ if ($result) {
     echo "Error executing query: " . $stmt->error;
 }
 
-// Close the prepared statement
 $stmt->close();
-
-// Close the database connection
 $conn->close();
 ?>
