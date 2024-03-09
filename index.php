@@ -33,7 +33,7 @@ if (isset($_SESSION['admin'])) {
                     <select id="filterSelect" class="form-select form-select-sm fw-bold text-uppercase">
                         <option disabled selected>Select Item</option>
                         <?php include 'database.php';
-                        $stmt = $conn->prepare("SELECT id, item FROM item");
+                        $stmt = $conn->prepare("SELECT id, item FROM item WHERE archive_status = 0 ");
 
                         if ($stmt && $stmt->execute()) {
                             $result = $stmt->get_result();
@@ -215,15 +215,8 @@ if (isset($_SESSION['admin'])) {
             if (storedFilter) {
                 // Set the selected filter to the stored value
                 $("#filterSelect").val(storedFilter);
-
-            } else {
-                // If there's no stored filter, select the default value (first option)
-                var defaultFilter = $("#filterSelect").val();
                 updateContent();
             }
-
-            // Call the function initially to load all data or the stored filter
-            updateContent();
 
             // Attach an event listener to the select dropdown
             $("#filterSelect").change(function () {
