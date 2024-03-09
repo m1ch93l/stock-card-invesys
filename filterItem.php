@@ -11,7 +11,7 @@ if ($filterCondition == 'all') {
     $stmt = $conn->prepare($sql);
 } else {
     // Modify this based on your specific filtering conditions
-    $sql  = "SELECT * FROM item WHERE id = ?";
+    $sql  = "SELECT * FROM item WHERE id = ? AND archive_status = 0";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $filterCondition);
 }

@@ -11,7 +11,7 @@ if ($filterCondition == 'all') {
     $stmt = $conn->prepare($sql);
 } else {
     // Modify this based on your specific filtering conditions
-    $sql  = "SELECT item, actual_delivery, SUM(balance_quantity) as remain FROM item JOIN released_item ON item.id=released_item.item_id WHERE item.id = ? GROUP BY item.id";
+    $sql  = "SELECT item, actual_delivery, SUM(balance_quantity) as remain FROM item JOIN released_item ON item.id=released_item.item_id WHERE item.id = ? AND archive_status = 0 GROUP BY item.id";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $filterCondition);
 }
