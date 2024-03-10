@@ -1,6 +1,6 @@
 <?php
 // Establish a connection to your MySQL database
-include 'database.php';
+require_once 'database.php';
 
 // Check if the filter condition is provided in the AJAX request, otherwise use a default filter
 $filterCondition = isset($_POST['filter']) ? $_POST['filter'] : 'all';

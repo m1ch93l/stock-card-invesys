@@ -1,5 +1,5 @@
 <?php session_start();
-include 'database.php';
+require_once 'database.php';
 
 function executePreparedStatement($conn, $query, $params, $types = "")
 {

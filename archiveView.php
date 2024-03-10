@@ -2,7 +2,7 @@
 session_start();
 if (isset($_SESSION['admin'])) {
 
-    include 'header.php';
+    require_once 'header.php';
 
     ?>
 
@@ -33,7 +33,7 @@ if (isset($_SESSION['admin'])) {
 
             <?php
 
-            include 'database.php';
+            require_once 'database.php';
 
             $getview = $_GET['getview'];
 
@@ -91,31 +91,31 @@ if (isset($_SESSION['admin'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php // Define the SQL query with placeholders
-                                            $query = "SELECT * FROM released_item WHERE item_id = ? ";
-                                            $stmt  = $conn->prepare($query);
-                                            $stmt->bind_param("i", $getview);
-                                            $stmt->execute();
-                                            $result = $stmt->get_result();
+                                <?php
+                                $query = "SELECT * FROM released_item WHERE item_id = ? ";
+                                $stmt  = $conn->prepare($query);
+                                $stmt->bind_param("i", $getview);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
 
-                                            while ($row = $result->fetch_assoc()) {
+                                while ($row = $result->fetch_assoc()) {
 
-                                                $dateString    = $row['date'];
-                                                $timestamp     = strtotime($dateString);
-                                                $formattedDate = date("F, j Y g:i a", $timestamp);
-                                                ?>
+                                    $dateString    = $row['date'];
+                                    $timestamp     = strtotime($dateString);
+                                    $formattedDate = date("F, j Y g:i a", $timestamp);
+                                    ?>
                                     <tr>
                                         <td>
-                                            1
+                                            <?= $row['date'] ?>
                                         </td>
                                         <td>
-                                            1
+                                            <?= $row['reference'] ?>
                                         </td>
                                         <td class="text-uppercase">
-                                            1
+                                            <?= $row['release_to'] ?>
                                         </td>
                                         <td class="text-danger fw-bold">
-                                            1
+                                            <?= $row['balance_quantity'] ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -131,14 +131,24 @@ if (isset($_SESSION['admin'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class='fw-bold fs-3'>
-                                        1
-                                    </td>
-                                    <td class='text-danger fw-bold fs-3'>
-                                        1
-                                    </td>
-                                </tr>
+                                <?php
+                                $query = "SELECT SUM(balance_quantity) as total_balance, actual_delivery FROM released_item INNER JOIN item ON item.id=released_item.item_id WHERE item_id = ? GROUP BY item_id";
+                                $stmt  = $conn->prepare($query);
+                                $stmt->bind_param("i", $getview);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+
+                                while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                    <tr>
+                                        <td class='fw-bold fs-3'>
+                                            <?= $row['total_balance']; ?>
+                                        </td>
+                                        <td class='text-danger fw-bold fs-3'>
+                                            <?= $total_released = $row['actual_delivery'] - $row['total_balance'] ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>

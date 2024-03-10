@@ -2,7 +2,7 @@
 session_start();
 if (isset($_SESSION['admin'])) {
 
-    include 'header.php';
+    require_once 'header.php';
 
     ?>
 
@@ -32,7 +32,7 @@ if (isset($_SESSION['admin'])) {
                 <div class="col-3">
                     <select id="filterSelect" class="form-select form-select-sm fw-bold text-uppercase">
                         <option disabled selected>Select Item</option>
-                        <?php include 'database.php';
+                        <?php require_once 'database.php';
                         $stmt = $conn->prepare("SELECT id, item FROM item WHERE archive_status = 0 ");
 
                         if ($stmt && $stmt->execute()) {
