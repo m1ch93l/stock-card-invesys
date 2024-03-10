@@ -1,6 +1,6 @@
 <?php
 // Establish a connection to your MySQL database
-include 'database.php';
+require_once 'database.php';
 
 // Check if the filter condition is provided in the AJAX request, otherwise use a default filter
 $filterCondition = isset($_POST['filter']) ? $_POST['filter'] : 'all';
@@ -11,7 +11,7 @@ if ($filterCondition == 'all') {
     $stmt = $conn->prepare($sql);
 } else {
     // Modify this based on your specific filtering conditions
-    $sql  = "SELECT * FROM released_item WHERE item_id = ?";
+    $sql  = "SELECT * FROM released_item JOIN item ON item.id=released_item.item_id WHERE released_item.item_id = ? AND archive_status = 0 ";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $filterCondition);
 }

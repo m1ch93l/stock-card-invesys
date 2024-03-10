@@ -1,5 +1,5 @@
 <?php session_start();
-include 'database.php';
+require_once 'database.php';
 
 function executePreparedStatement($conn, $query, $params, $types = "")
 {
@@ -65,6 +65,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $query  = "DELETE FROM item WHERE id = ?";
         $params = [$itemid];
         if (executePreparedStatement($conn, $query, $params, "i")) {
+            header("Location: index.php");
+        }
+    }
+    // update item archive status
+    if (isset($_POST['stock-archive'])) {
+        $itemid = mysqli_real_escape_string($conn, $_POST['itemId']);
+        $status = mysqli_real_escape_string($conn, $_POST['status']);
+        $query  = "UPDATE item SET archive_status = ? WHERE id = ?";
+        $params = [$status, $itemid];
+        if (executePreparedStatement($conn, $query, $params, "ii")) {
             header("Location: index.php");
         }
     }

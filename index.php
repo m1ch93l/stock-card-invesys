@@ -2,7 +2,7 @@
 session_start();
 if (isset($_SESSION['admin'])) {
 
-    include 'header.php';
+    require_once 'header.php';
 
     ?>
 
@@ -32,8 +32,8 @@ if (isset($_SESSION['admin'])) {
                 <div class="col-3">
                     <select id="filterSelect" class="form-select form-select-sm fw-bold text-uppercase">
                         <option disabled selected>Select Item</option>
-                        <?php include 'database.php';
-                        $stmt = $conn->prepare("SELECT id, item FROM item");
+                        <?php require_once 'database.php';
+                        $stmt = $conn->prepare("SELECT id, item FROM item WHERE archive_status = 0 ");
 
                         if ($stmt && $stmt->execute()) {
                             $result = $stmt->get_result();
@@ -51,9 +51,12 @@ if (isset($_SESSION['admin'])) {
                         ?>
                     </select>
                 </div>
-                <div class="col-8">
+                <div class="col-7">
                     <button type="button" class="btn btn-outline-light btn-sm fw-bold" data-bs-toggle="modal"
                         data-bs-target="#addRelease">Release</button>
+                </div>
+                <div class="col-1">
+                    <a href="archive.php" type="button" class="btn btn-danger btn-sm fw-bold border-light">Archive</a>
                 </div>
             </div>
 
@@ -212,15 +215,8 @@ if (isset($_SESSION['admin'])) {
             if (storedFilter) {
                 // Set the selected filter to the stored value
                 $("#filterSelect").val(storedFilter);
-
-            } else {
-                // If there's no stored filter, select the default value (first option)
-                var defaultFilter = $("#filterSelect").val();
                 updateContent();
             }
-
-            // Call the function initially to load all data or the stored filter
-            updateContent();
 
             // Attach an event listener to the select dropdown
             $("#filterSelect").change(function () {

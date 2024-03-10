@@ -11,7 +11,7 @@ if ($filterCondition == 'all') {
     $stmt = $conn->prepare($sql);
 } else {
     // Modify this based on your specific filtering conditions
-    $sql  = "SELECT * FROM item WHERE id = ?";
+    $sql  = "SELECT * FROM item WHERE id = ? AND archive_status = 0";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $filterCondition);
 }
@@ -36,8 +36,9 @@ if ($result) {
             <p class='border-bottom text-capitalize'><b>Actual Delivery: </b>{$row['actual_delivery']}</p>
         </div>
         <div class='col-1 text-center mt-2'>
-            <button type='button' class='btn btn-light fs-4 p-2 m-2' data-bs-toggle='modal' data-bs-target='#editItem{$row['id']}'><span><i class='bx bx-edit text-primary'></i></span></button>
-            <button type='button' class='btn btn-light fs-4 p-2 m-2' data-bs-toggle='modal' data-bs-target='#deleteItem{$row['id']}'><span><i class='bx bx-trash text-danger'></i></span></button>
+            <button type='button' class='btn btn-light fs-4 p-1 m-1' data-bs-toggle='modal' data-bs-target='#editItem{$row['id']}'><span><i class='bx bx-edit text-primary'></i></span></button>
+            <button type='button' class='btn btn-light fs-4 p-1 m-1' data-bs-toggle='modal' data-bs-target='#deleteItem{$row['id']}'><span><i class='bx bx-trash text-danger'></i></span></button>
+            <button type='button' class='btn btn-light fs-4 p-1 m-1' data-bs-toggle='modal' data-bs-target='#archiveItem{$row['id']}'><span><i class='bx bx-archive-in'></i></span></button>
         </div>
     </div>
 
@@ -92,6 +93,29 @@ if ($result) {
                     <div class='modal-footer'>
                         <button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Cancel</button>
                         <button type='submit' name='stock-delete' class='btn btn-danger btn-sm'>Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Archive modal -->
+    <div class='modal fade' id='archiveItem{$row['id']}' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h1 class='modal-title fs-5'>Confirm Archiving</h1>
+                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <form action='crud.php' method='post'>
+                    <div class='modal-body'>
+                        <p>Are you sure you want to archive this item '{$row['item']}'?</p>
+                        <input type='hidden' value='{$row['id']}' name='itemId'>
+                        <input type='hidden' value='1' name='status'>
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='btn btn-secondary btn-sm' data-bs-dismiss='modal'>Cancel</button>
+                        <button type='submit' name='stock-archive' class='btn btn-danger btn-sm'>Archive</button>
                     </div>
                 </form>
             </div>
