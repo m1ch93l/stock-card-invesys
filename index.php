@@ -96,7 +96,7 @@ if (isset($_SESSION['admin'])) {
                             <label for="" class="form-label">Re-order Point:</label>
                             <input type="text" class="form-control mb-1" name="reorder">
                             <label for="" class="form-label">Actual Delivery:</label>
-                            <input type="text" class="form-control mb-1" name="actualDelivery" required>
+                            <input type="number" class="form-control mb-1" name="actualDelivery" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -127,7 +127,7 @@ if (isset($_SESSION['admin'])) {
                             <select id="itemId" name="itemId" class="form-select border-success mb-1">
                                 <option disabled selected>Select Item</option>
                                 <?php include 'database.php';
-                                $stmt = $conn->prepare("SELECT id, item FROM item");
+                                $stmt = $conn->prepare("SELECT id, item FROM item WHERE archive_status = 0 ");
 
                                 if ($stmt && $stmt->execute()) {
                                     $result = $stmt->get_result();
@@ -149,7 +149,7 @@ if (isset($_SESSION['admin'])) {
                             <label for="" class="form-label">Recipient:</label>
                             <input type="text" class="form-control mb-1" name="releasedBy" required>
                             <label for="" class="form-label">Balance:</label>
-                            <input type="text" class="form-control mb-1" name="balance" required>
+                            <input type="number" class="form-control mb-1" name="balance" required>
                         </div>
                     </div>
                     <div class="modal-footer">
