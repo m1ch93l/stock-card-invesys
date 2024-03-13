@@ -26,7 +26,7 @@ if (isset($_SESSION['admin'])) {
             </div>
             <div class="row p-2" style="background-color: #D5640E">
                 <div class="col-1">
-                    <a href="index.php" type="button" class="btn btn-sm fw-bold fs-5 text-white"><i
+                    <a href="index.php" type="button" class="btn btn-sm fw-bold fs-7 text-white"><i
                             class='bx bx-arrow-back'></i></a>
                 </div>
                 <div class="col-2">
